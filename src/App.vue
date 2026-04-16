@@ -1,51 +1,78 @@
+//App.vue
+
 <template>
-  <div class="header">
-    <ul class="header-button-left">
-      <li>Cancel</li>
-    </ul>
-    <ul class="header-button-right">
-      <li>Next</li>
-    </ul>
-    <img src="./assets/logo.svg" class="logo" />
-  </div>
+  <div>
+    <div class="header">
+      <ul class="header-button-left">
+        <li>Cancel</li>
+      </ul>
+      <ul class="header-button-right">
+        <li v-if="step == 1" @click="step++">Next</li>
+        <li v-if="step == 2" @click="publish">발행</li>
+      </ul>
+      <img src="./assets/logo.svg" class="logo" />
+    </div>
 
-  <Container :Posts="Posts" />
+    <Container :posts="posts" :step="step" :image="image" />
+    <button @click="more">더보기</button>
 
-  <button @click="more">더보기</button>
-
-  <div class="footer">
-    <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
-      <label for="file" class="input-plus">+</label>
-    </ul>
+    <div class="footer">
+      <ul class="footer-button-plus">
+        <input @change="upload" type="file" id="file" class="inputfile" />
+        <label for="file" class="input-plus">+</label>
+      </ul>
+    </div>
   </div>
 </template>
+
 <script>
-import Container from "./components/Container.vue";
-import PostData from "./Post";
+import Container from './components/Container.vue';
+import posts from './Post.js';
 import axios from 'axios';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Container,
+    Container
   },
   data() {
     return {
-      Posts: PostData,
+      step: 0,
       moreCount: 0,
+      posts,
+      image: '',
     };
   },
   methods: {
     more() {
-      axios.get(`https://qkrwpgus.github.io/vue/more${this.moreCount}.json`)
-        .then((result) => {
-          this.Posts.push(...result.data);
-          this.moreCount++;
-        })
-        .catch((error) => {
-          console.error("게시물을 가져오는데 실패했습니다.", error);
-        });
+      const url = `https://qkrwpgus.github.io/vue/more${this.moreCount}.json`;
+      axios.get(url).then((result) => {
+        this.posts.push(...result.data);
+        this.moreCount += 1;
+      });
+    },
+    upload(e) {
+      let 파일 = e.target.files;
+      console.log(파일);
+      console.log(파일[0]);
+      let url = URL.createObjectURL(파일[0]);
+      console.log(url);
+      this.image = url;
+      this.step++;
+    },
+    publish() {
+      var 내게시물 = {
+        name: "Kim Hyun",
+        userImage: "https://picsum.photos/100?random=3",
+        postImage: "https://picsum.photos/600?random=3",
+        likes: 36,
+        date: "May 15",
+        liked: false,
+        content: "오늘 무엇을 했냐면요 아무것도 안했어요 ?",
+        filter: "perpetua"
+      };
+      this.posts.unshift(내게시물);
+      this.step = 0;
     }
   }
 };
