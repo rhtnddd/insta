@@ -1,5 +1,3 @@
-//App.vue
-
 <template>
   <div>
     <div class="header">
@@ -13,7 +11,7 @@
       <img src="./assets/logo.svg" class="logo" />
     </div>
 
-    <Container :posts="posts" :step="step" :image="image" />
+    <Container :posts="posts" :step="step" :image="image" @publish="text = $event" @selectedFilter="selectedFilter = $event" />
     <button @click="more">더보기</button>
 
     <div class="footer">
@@ -41,6 +39,8 @@ export default {
       moreCount: 0,
       posts,
       image: '',
+      text: '',
+      selectedFilter: '',
     };
   },
   methods: {
@@ -64,12 +64,12 @@ export default {
       var 내게시물 = {
         name: "Kim Hyun",
         userImage: "https://picsum.photos/100?random=3",
-        postImage: "https://picsum.photos/600?random=3",
+        postImage: this.image,
         likes: 36,
         date: "May 15",
         liked: false,
-        content: "오늘 무엇을 했냐면요 아무것도 안했어요 ?",
-        filter: "perpetua"
+        content: this.text,
+        filter: this.selectedFilter
       };
       this.posts.unshift(내게시물);
       this.step = 0;
