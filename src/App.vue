@@ -10,8 +10,10 @@
       </ul>
       <img src="./assets/logo.svg" class="logo" />
     </div>
-
-    <Container :posts="posts" :step="step" :image="image" @publish="text = $event" @selectedFilter="selectedFilter = $event" />
+    <button @click="$store.commit('나이')">{{ $store.state.age }}</button>
+    <button @click="$store.commit('나이넣기', message)">버튼2</button>
+    <input v-model="message" />
+    <Container :posts="posts" :step="step" :image="image" :filter="filterbox" />
     <button @click="more">더보기</button>
 
     <div class="footer">
@@ -39,11 +41,21 @@ export default {
       moreCount: 0,
       posts,
       image: '',
-      text: '',
-      selectedFilter: '',
+      content: '',
+      filterbox: '',
     };
   },
+  mounted() {
+    this.emitter.on('filterbox', (filterbox) => {
+      this.filterbox = filterbox;
+    });
+
+    this.emitter.on('write', (content) => {
+      this.content = content;
+    })
+  },
   methods: {
+
     more() {
       const url = `https://qkrwpgus.github.io/vue/more${this.moreCount}.json`;
       axios.get(url).then((result) => {
@@ -68,8 +80,8 @@ export default {
         likes: 36,
         date: "May 15",
         liked: false,
-        content: this.text,
-        filter: this.selectedFilter
+        content: this.content,
+        filter: this.filterbox
       };
       this.posts.unshift(내게시물);
       this.step = 0;

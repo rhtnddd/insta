@@ -1,6 +1,7 @@
 <template>
     <div class="filter-item upload-image" :class="filter" :style="{ backgroundImage: `url(${image})` }"
-        @click="$emit('filterbox', filter)">{{ filter }}</div>
+        @click="filterbox">
+    </div>
 </template>
 
 <script>
@@ -9,6 +10,11 @@ export default {
     props: {
         image: String,
         filter: String,
+    },
+    methods: {
+        filterbox() {
+            this.emitter.emit('filterbox', this.filter);
+        }
     }
 };
 </script>
