@@ -1,10 +1,9 @@
 <template>
     <div class="container">
         <div v-if="step == 0">
-            <Post v-for="(post, index) in posts" :key="index" :post="post" />
+            <Post v-for="(post, index) in posts" :key="index" :post="post" :index="index" />
         </div>
 
-        <!-- 필터선택페이지 -->
         <div v-if="step == 1">
             <div class="upload-image" :class="filter" :style="{ backgroundImage: `url(${image})` }"></div>
             <div class="filters">
@@ -13,7 +12,6 @@
             </div>
         </div>
 
-        <!-- 글작성페이지 -->
         <div v-if="step == 2">
             <div class="upload-image" :class="filter" :style="{ backgroundImage: `url(${image})` }"></div>
             <div class="write">
@@ -21,7 +19,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>

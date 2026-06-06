@@ -7,7 +7,6 @@ import store from "./store";
 
 let emitter = mitt();
 let app = createApp(App);
-app.use(store).mount("#app");
-app.config.globalProperties.emitter = emitter;
 
-app.mount("#app");
+app.config.globalProperties.emitter = emitter;
+app.use(store).mount("#app");

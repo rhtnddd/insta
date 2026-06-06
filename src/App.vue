@@ -13,7 +13,7 @@
     <button @click="$store.commit('나이')">{{ $store.state.age }}</button>
     <button @click="$store.commit('나이넣기', message)">버튼2</button>
     <input v-model="message" />
-    <Container :posts="posts" :step="step" :image="image" :filter="filterbox" />
+    <Container :posts="$store.state.posts" :step="step" :image="image" :filter="filterbox" />
     <button @click="more">더보기</button>
 
     <div class="footer">
@@ -27,7 +27,6 @@
 
 <script>
 import Container from './components/Container.vue';
-import posts from './Post.js';
 import axios from 'axios';
 
 export default {
@@ -39,7 +38,6 @@ export default {
     return {
       step: 0,
       moreCount: 0,
-      posts,
       image: '',
       content: '',
       filterbox: '',
@@ -55,20 +53,16 @@ export default {
     })
   },
   methods: {
-
     more() {
       const url = `https://qkrwpgus.github.io/vue/more${this.moreCount}.json`;
       axios.get(url).then((result) => {
-        this.posts.push(...result.data);
+        this.$store.commit('setMorePosts', result.data);
         this.moreCount += 1;
       });
     },
     upload(e) {
       let 파일 = e.target.files;
-      console.log(파일);
-      console.log(파일[0]);
       let url = URL.createObjectURL(파일[0]);
-      console.log(url);
       this.image = url;
       this.step++;
     },
@@ -83,7 +77,7 @@ export default {
         content: this.content,
         filter: this.filterbox
       };
-      this.posts.unshift(내게시물);
+      this.$store.commit('publishPost', 내게시물);
       this.step = 0;
     }
   }

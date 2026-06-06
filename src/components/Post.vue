@@ -1,4 +1,3 @@
-// Post.vue
 <template>
   <div class="post">
     <div class="post-header">
@@ -7,7 +6,7 @@
     </div>
 
     <div class="post-body">
-      <div class="post-image" :class="post.filter" :style="{ backgroundImage: `url(${post.postImage})` }"></div>
+      <div @click="$store.commit('likeToggle', index)" class="post-image" :class="post.filter" :style="{ backgroundImage: `url(${post.postImage})` }"></div>
     </div>
 
     <div class="post-content">
@@ -26,6 +25,7 @@ export default {
   name: 'Post',
   props: {
     post: Object,
+    index: Number,
   }
 };
 </script>
