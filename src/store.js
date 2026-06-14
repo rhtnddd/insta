@@ -1,10 +1,12 @@
 import { createStore } from "vuex";
 import posts from "./Post.js";
+import axios from "axios";
 
 const store = createStore({
   state() {
     return {
       posts: posts,
+      moreCount: 0,
       age: 0,
     };
   },
@@ -29,6 +31,15 @@ const store = createStore({
     },
     나이넣기(state, input) {
       state.age = input;
+    },
+  },
+  actions: {
+    more(content) {
+      const url = `https://qkrwpgus.github.io/vue/more${content.state.moreCount}.json`;
+      axios.get(url).then((result) => {
+        content.commit("setMorePosts", result.data);
+        content.state.moreCount += 1;
+      });
     },
   },
 });

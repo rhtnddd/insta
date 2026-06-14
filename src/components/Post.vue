@@ -6,7 +6,8 @@
     </div>
 
     <div class="post-body">
-      <div @click="$store.commit('likeToggle', index)" class="post-image" :class="post.filter" :style="{ backgroundImage: `url(${post.postImage})` }"></div>
+      <div @click="likeToggle(index)" class="post-image" :class="post.filter"
+        :style="{ backgroundImage: `url(${post.postImage})` }"></div>
     </div>
 
     <div class="post-content">
@@ -21,11 +22,15 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
   name: 'Post',
   props: {
     post: Object,
     index: Number,
+  },
+  methods: {
+    ...mapMutations(['likeToggle', 'setMore'])
   }
 };
 </script>

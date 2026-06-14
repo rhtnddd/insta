@@ -10,11 +10,11 @@
       </ul>
       <img src="./assets/logo.svg" class="logo" />
     </div>
-    <button @click="$store.commit('나이')">{{ $store.state.age }}</button>
-    <button @click="$store.commit('나이넣기', message)">버튼2</button>
+    <button @click="나이()">{{ age }}</button>
+    <button @click="나이넣기(message)">버튼2</button>
     <input v-model="message" />
-    <Container :posts="$store.state.posts" :step="step" :image="image" :filter="filterbox" />
-    <button @click="more">더보기</button>
+    <Container :posts="posts" :step="step" :image="image" :filter="filterbox" />
+    <button @click="more()">더보기</button>
 
     <div class="footer">
       <ul class="footer-button-plus">
@@ -27,7 +27,7 @@
 
 <script>
 import Container from './components/Container.vue';
-import axios from 'axios';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       step: 0,
-      moreCount: 0,
       image: '',
       content: '',
       filterbox: '',
@@ -52,14 +51,12 @@ export default {
       this.content = content;
     })
   },
+  computed: {
+    ...mapState(['posts', 'age']),
+  },
   methods: {
-    more() {
-      const url = `https://qkrwpgus.github.io/vue/more${this.moreCount}.json`;
-      axios.get(url).then((result) => {
-        this.$store.commit('setMorePosts', result.data);
-        this.moreCount += 1;
-      });
-    },
+    ...mapMutations(['나이', '나이넣기', 'publishPost']),
+    ...mapActions(['more']),
     upload(e) {
       let 파일 = e.target.files;
       let url = URL.createObjectURL(파일[0]);
@@ -77,7 +74,7 @@ export default {
         content: this.content,
         filter: this.filterbox
       };
-      this.$store.commit('publishPost', 내게시물);
+      this.publishPost(내게시물);
       this.step = 0;
     }
   }
